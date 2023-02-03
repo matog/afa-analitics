@@ -218,14 +218,89 @@ with tab2:
                 st.altair_chart(graph_club_altair, use_container_width=True)
         number_plot = number_plot + 1
 
+def rename_columns(data, col1, col2, variables_plot_dict):
+    # st.text(variables_plot_dict[col2])
+    # st.text(variables_plot_dict[col2])
+    data.rename(columns={col1: 'Club',
+                         col2: variables_plot_dict[col2],},
+                inplace=True)
+    return data
+
+
 with tab3:
-    col31, col32,col33 = st.columns(3)
-    # with col31:
-    #     st.subheader('Clubes con mas títulos locales')
-    #     titulos_primera = data['titulos_primera'].max()
-    #     titulos_primera_club = data['titulos_primera'].max().['nombre_coloquial']
-    #     st.text(titulos_primera)
-    #     st.text(titulos_primera_club)
+    col31, col32,col33, col34 = st.columns(4)
+    top_variables = ['capacidad_estadio', 'socios', 'titulos_primera', 'titulos_internacionales', 'entradas_vendidas', 'sueldo_dt', 'sueldos_plantel', 'balance_anual']
+    number_plot = 0
+    for var in top_variables:
+        if number_plot<=1:
+            with col31:
+                st.subheader(variables_plot_dict[var])
+                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top[['nombre_coloquial', var]]
+                top_df = rename_columns(df_top, 'nombre_coloquial',var,variables_plot_dict)
+                # CSS to inject contained in a string
+                hide_table_row_index = """
+                            <style>
+                            thead tr th:first-child {display:none}
+                            tbody th {display:none}
+                            </style>
+                            """
+                # Inject CSS with Markdown
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+                # Display a static table
+                st.table(top_df)
+        if 2<= number_plot <= 3:
+            with col32:
+                st.subheader(variables_plot_dict[var])
+                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top[['nombre_coloquial', var]]
+                top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
+                # CSS to inject contained in a string
+                hide_table_row_index = """
+                            <style>
+                            thead tr th:first-child {display:none}
+                            tbody th {display:none}
+                            </style>
+                            """
+                # Inject CSS with Markdown
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+                # Display a static table
+                st.table(top_df)
+        if 4<= number_plot <= 5:
+            with col33:
+                st.subheader(variables_plot_dict[var])
+                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top[['nombre_coloquial', var]]
+                top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
+                # CSS to inject contained in a string
+                hide_table_row_index = """
+                            <style>
+                            thead tr th:first-child {display:none}
+                            tbody th {display:none}
+                            </style>
+                            """
+                # Inject CSS with Markdown
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+                # Display a static table
+                st.table(top_df)
+        if 6<= number_plot <= 9:
+            with col34:
+                st.subheader(variables_plot_dict[var])
+                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top[['nombre_coloquial', var]]
+                top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
+                # CSS to inject contained in a string
+                hide_table_row_index = """
+                            <style>
+                            thead tr th:first-child {display:none}
+                            tbody th {display:none}
+                            </style>
+                            """
+                # Inject CSS with Markdown
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+                # Display a static table
+                st.table(top_df)
+        number_plot = number_plot +1
 
 
 with tab4:
