@@ -73,17 +73,20 @@ def density_graph_club(club, data, data_club, categoria, variable, x_axis_label,
     #     opacity=0.2,
     #     color='red'
     # )
-    media_line = (
-        alt.Chart(data)
-            .transform_quantile(variable, as_=['prob', 'value'])
-            .mark_rule()
-            .encode(
-            x='mean(value):Q',
-            color=alt.value('red')
-        )
-    )
+    club_value = data_club[variable].values[0]
+    st.caption("Valor para el club:"+str(club_value))
+    club_line = alt.Chart(pd.DataFrame({'a': [club_value]})).mark_rule(color='red').encode(x='a')
+    # media_line = (
+    #     alt.Chart(data_club[variable].values[0])
+    #         .transform_quantile(variable, as_=['prob', 'value'])
+    #         .mark_rule()
+    #         .encode(
+    #         x='mean(value):Q',
+    #         color=alt.value('red')
+    #     )
+    # )
 
-    return c, media_line
+    return c, club_line
 
 variables_plot_dict = {'capacidad_estadio':'Capacidad del Estadio',
                       'socios':'Cantidad de Socios',
@@ -106,7 +109,7 @@ variables_plot_dict = {'capacidad_estadio':'Capacidad del Estadio',
 
 st.title('FUTBOL O MUERTE!')
 # Definimos las tabs
-tab1, tab2, tab3 = st.tabs(["GENERAL", "CLUB POR CLUB", "About"])
+tab1, tab2, tab3, tab4 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "ABOUT"])
 
 
 
@@ -128,7 +131,8 @@ with tab1:
     #     default='PBA'
     # )
 
-    # Generamos la grilla con 3 columnas
+
+    # Generamos la grilla con 3 columnas para los gráficos
     col11, col12, col13 = st.columns(3)
     number_plot = 0
 
@@ -215,6 +219,16 @@ with tab2:
         number_plot = number_plot + 1
 
 with tab3:
+    col31, col32,col33 = st.columns(3)
+    # with col31:
+    #     st.subheader('Clubes con mas títulos locales')
+    #     titulos_primera = data['titulos_primera'].max()
+    #     titulos_primera_club = data['titulos_primera'].max().['nombre_coloquial']
+    #     st.text(titulos_primera)
+    #     st.text(titulos_primera_club)
+
+
+with tab4:
     # st.header("About")
     about = '''Desarrollado por [Mato](https://matog.github.io/cv/), con la base gentimente cedida por [@unknown.datasets](https://linktr.ee/unknow.datasets)
 
