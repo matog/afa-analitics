@@ -220,6 +220,6 @@ with tab3:
 
 Todo corre sobre [Streamlit](https://www.streamlit.io), un framework de Python para desarrollar dashboards, y utiliza [Pandas](https://pandas.pydata.org/) para procesar la info y [Altair](https://altair-viz.github.io/) para graficarla.
 
-El código está disponible en [Github](www.github.com)'''
+El código está disponible en [Github](https://github.com/matog/futbol-streamlit)'''
     st.markdown(about)
 
