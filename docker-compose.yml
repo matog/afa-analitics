@@ -1,0 +1,8 @@
+services:
+  afa-data:
+    container_name: "AFA-DATA"
+    build:
+      dockerfile: ./Dockerfile
+      context: ./
+    ports:
+      - '8012:8501'

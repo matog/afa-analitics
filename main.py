@@ -5,8 +5,8 @@ import altair as alt
 import datetime as dt
 from datetime import time
 from PIL import Image
-import folium
-from streamlit_folium import st_folium
+# import folium
+# from streamlit_folium import st_folium
 
 # Usamos todo el ancho en lugar de la parte central de la pagina
 st.set_page_config(page_title="Afa-nalytics",
@@ -378,16 +378,16 @@ with tab5:
     st.text(gap_years)
     #
     df_geo = data.loc[((data['fundacion_anio']>=gap_years[0]) & (data['fundacion_anio']<=gap_years[1])) & (data['lat']!=0) ]
-    # st.map(df_geo)
-    map = folium.Map(location=[df_geo['lat'].mean(),
-                               df_geo['lon'].mean()],
-                     zoom_start=10,
-                     control_scale=True)
-
-    for index, location_info in df_geo.iterrows():
-        folium.Marker([location_info["lat"],
-                       location_info["lon"]],
-                      popup=location_info["nombre_club"] + " - " + str(location_info["fundacion_anio"])).add_to(map)
+    st.map(df_geo)
+    # map = folium.Map(location=[df_geo['lat'].mean(),
+    #                            df_geo['lon'].mean()],
+    #                  zoom_start=10,
+    #                  control_scale=True)
+    #
+    # for index, location_info in df_geo.iterrows():
+    #     folium.Marker([location_info["lat"],
+    #                    location_info["lon"]],
+    #                   popup=location_info["nombre_club"] + " - " + str(location_info["fundacion_anio"])).add_to(map)
 
 
     st_data = st_folium(map, width='100%')
