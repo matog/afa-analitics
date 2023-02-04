@@ -2,8 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import datetime as dt
+from datetime import time
 from PIL import Image
-
+import folium
+from streamlit_folium import st_folium
 
 # Usamos todo el ancho en lugar de la parte central de la pagina
 st.set_page_config(page_title="Afa-nalytics",
@@ -18,6 +21,11 @@ DATA_URL = ('data/clubes.csv')
 @st.cache
 def load_data():
     data = pd.read_csv(DATA_URL)
+    # data['fecha_fundacion'] = data['fecha_fundacion'].apply(pd.to_datetime)
+    data["fecha"] = pd.to_datetime(data["fecha_fundacion"])
+    data['fundacion_dia'] = data["fecha"].dt.day
+    data['fundacion_mes'] = data["fecha"].dt.month
+    data['fundacion_anio'] = data["fecha"].dt.year
     return data
 
 
@@ -112,7 +120,7 @@ st.title('AFA-nalytics')
 st.markdown('CAMPEONES DEL MUNDO   :star: :star: :star:')
 
 # Definimos las tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "GUERRA DE CLUBES", "ABOUT"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "GUERRA DE CLUBES", "TIMELINE", "ABOUT"])
 
 
 
@@ -174,7 +182,9 @@ with tab2:
 
         club_data = data.loc[data['nombre_coloquial']==club_sb]
 
-        txt_fundacion  = '**- Fecha fundación:** ' + club_data['fecha_fundacion'].values[0]
+        # Separador de miles
+        club_data  = club_data.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
+        txt_fundacion  = '**- Fecha fundación:** ' + str(club_data['fundacion_dia'].values[0]) + "/" + str(club_data['fundacion_mes'].values[0]) + "/" + str(club_data['fundacion_anio'].values[0])
         txt_barrio = '**- Barrio:** ' + club_data['barrio_localidad'].values[0]
         txt_socios = '**- Socios:** ' + str(club_data['socios'].values[0])
         txt_estadio = '**- Estadio:** ' + club_data['nombre_estadio'].values[0]
@@ -232,6 +242,7 @@ with tab3:
     top_variables = ['capacidad_estadio', 'socios', 'titulos_primera', 'titulos_internacionales', 'entradas_vendidas', 'sueldo_dt', 'sueldos_plantel', 'balance_anual']
     number_plot = 0
     df_top_format = data.copy()
+    # Separador de miles.
     df_top_format = df_top_format.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
     for var in top_variables:
         if number_plot<=1:
@@ -350,10 +361,41 @@ with tab4:
 
             df_guerra = df_guerra.replace({"variable": variables_plot_dict})
             df_guerra.set_index('variable')
+
+            # Separador de miles.
             df_guerra = df_guerra.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
             with col42:
                 st.table(df_guerra)
+
 with tab5:
+    st.subheader('Evolución de los clubes en la zona PBA y CABA')
+    year_min = data['fundacion_anio'].min()
+    year_max = data['fundacion_anio'].max()
+
+    gap_years = st.slider(
+        'Seleccione el rango de fechas',
+        year_min, year_max, (year_min, year_max))
+    st.text(gap_years)
+    #
+    df_geo = data.loc[((data['fundacion_anio']>=gap_years[0]) & (data['fundacion_anio']<=gap_years[1])) & (data['lat']!=0) ]
+    # st.map(df_geo)
+    map = folium.Map(location=[df_geo['lat'].mean(),
+                               df_geo['lon'].mean()],
+                     zoom_start=10,
+                     control_scale=True)
+
+    for index, location_info in df_geo.iterrows():
+        folium.Marker([location_info["lat"],
+                       location_info["lon"]],
+                      popup=location_info["nombre_club"] + " - " + str(location_info["fundacion_anio"])).add_to(map)
+
+
+    st_data = st_folium(map, width='100%')
+
+
+
+
+with tab6:
     # st.header("About")
     about = '''Desarrollado por [Mato](https://matog.github.io/cv/), con la base gentimente cedida por [@unknown.datasets](https://linktr.ee/unknow.datasets)
 
