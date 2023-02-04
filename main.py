@@ -76,7 +76,7 @@ def density_graph_club(club, data, data_club, categoria, variable, x_axis_label,
     # )
     club_value = data_club[variable].values[0]
     st.caption("Valor para el club:"+str(club_value))
-    club_line = alt.Chart(pd.DataFrame({'a': [club_value]})).mark_rule(color='red').encode(x='a')
+    club_line = alt.Chart(pd.DataFrame({'Linea roja: Club': [club_value]})).mark_rule(color='red').encode(x='Linea roja: Club', strokeWidth=alt.value(5))
     # media_line = (
     #     alt.Chart(data_club[variable].values[0])
     #         .transform_quantile(variable, as_=['prob', 'value'])
@@ -108,7 +108,9 @@ variables_plot_dict = {'capacidad_estadio':'Capacidad del Estadio',
                       'balance_anual':'Balance anual'}
 
 
-st.title('AFA-nalytics!')
+st.title('AFA-nalytics')
+st.markdown('CAMPEONES DEL MUNDO   :star: :star: :star:')
+
 # Definimos las tabs
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "GUERRA DE CLUBES", "ABOUT"])
 
