@@ -22,10 +22,10 @@ DATA_URL = ('data/clubes.csv')
 def load_data():
     data = pd.read_csv(DATA_URL)
     # data['fecha_fundacion'] = data['fecha_fundacion'].apply(pd.to_datetime)
-    data["fecha"] = pd.to_datetime(data["fecha_fundacion"])
-    data['fundacion_dia'] = data["fecha"].dt.day
-    data['fundacion_mes'] = data["fecha"].dt.month
-    data['fundacion_anio'] = data["fecha"].dt.year
+    # data["fecha"] = pd.to_datetime(data["fecha_fundacion"])
+    # data['fundacion_dia'] = data["fecha"].dt.day
+    # data['fundacion_mes'] = data["fecha"].dt.month
+    # data['fundacion_anio'] = data["fecha"].dt.year
     return data
 
 
@@ -184,14 +184,14 @@ with tab2:
 
         # Separador de miles
         club_data  = club_data.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
-        txt_fundacion  = '**- Fecha fundación:** ' + str(club_data['fundacion_dia'].values[0]) + "/" + str(club_data['fundacion_mes'].values[0]) + "/" + str(club_data['fundacion_anio'].values[0])
+        # txt_fundacion  = '**- Fecha fundación:** ' + str(club_data['fundacion_dia'].values[0]) + "/" + str(club_data['fundacion_mes'].values[0]) + "/" + str(club_data['fundacion_anio'].values[0])
         txt_barrio = '**- Barrio:** ' + club_data['barrio_localidad'].values[0]
         txt_socios = '**- Socios:** ' + str(club_data['socios'].values[0])
         txt_estadio = '**- Estadio:** ' + club_data['nombre_estadio'].values[0]
         txt_categoria = '**- Categoría:** ' + club_data['categoria'].values[0]
         txt_titulos_primera = '**- Títulos en primera:** ' + str(club_data['titulos_primera'].values[0])
         txt_titulos_internacionales = '**- Títulos internacionales:** ' + str(club_data['titulos_internacionales'].values[0])
-        st.markdown(txt_fundacion)
+        # st.markdown(txt_fundacion)
         st.markdown(txt_barrio)
         st.markdown(txt_socios)
         st.markdown(txt_estadio)
@@ -368,7 +368,7 @@ with tab4:
                 st.table(df_guerra)
 
 with tab5:
-    # st.subheader('Evolución de los clubes en la zona PBA y CABA')
+    st.subheader('En construcción - Evolución de los clubes en la zona PBA y CABA')
     # year_min = data['fundacion_anio'].min()
     # year_max = data['fundacion_anio'].max()
     #
@@ -390,7 +390,7 @@ with tab5:
     #                   popup=location_info["nombre_club"] + " - " + str(location_info["fundacion_anio"])).add_to(map)
 
 
-    st_data = st_folium(map, width='100%')
+    # st_data = st_folium(map, width='100%')
 
 
 
