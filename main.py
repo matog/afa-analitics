@@ -368,17 +368,17 @@ with tab4:
                 st.table(df_guerra)
 
 with tab5:
-    st.subheader('Evolución de los clubes en la zona PBA y CABA')
-    year_min = data['fundacion_anio'].min()
-    year_max = data['fundacion_anio'].max()
-
-    gap_years = st.slider(
-        'Seleccione el rango de fechas',
-        year_min, year_max, (year_min, year_max))
-    st.text(gap_years)
+    # st.subheader('Evolución de los clubes en la zona PBA y CABA')
+    # year_min = data['fundacion_anio'].min()
+    # year_max = data['fundacion_anio'].max()
     #
-    df_geo = data.loc[((data['fundacion_anio']>=gap_years[0]) & (data['fundacion_anio']<=gap_years[1])) & (data['lat']!=0) ]
-    st.map(df_geo)
+    # gap_years = st.slider(
+    #     'Seleccione el rango de fechas',
+    #     year_min, year_max, (year_min, year_max))
+    # st.text(gap_years)
+    # #
+    # df_geo = data.loc[((data['fundacion_anio']>=gap_years[0]) & (data['fundacion_anio']<=gap_years[1])) & (data['lat']!=0) ]
+    # st.map(df_geo)
     # map = folium.Map(location=[df_geo['lat'].mean(),
     #                            df_geo['lon'].mean()],
     #                  zoom_start=10,
