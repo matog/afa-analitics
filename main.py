@@ -231,11 +231,13 @@ with tab3:
     col31, col32,col33, col34 = st.columns(4)
     top_variables = ['capacidad_estadio', 'socios', 'titulos_primera', 'titulos_internacionales', 'entradas_vendidas', 'sueldo_dt', 'sueldos_plantel', 'balance_anual']
     number_plot = 0
+    df_top_format = data.copy()
+    df_top_format = df_top_format.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
     for var in top_variables:
         if number_plot<=1:
             with col31:
                 st.subheader(variables_plot_dict[var])
-                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top_format.sort_values(by=var, ascending=False).head(5)
                 df_top = df_top[['nombre_coloquial', var]]
                 top_df = rename_columns(df_top, 'nombre_coloquial',var,variables_plot_dict)
                 # CSS to inject contained in a string
@@ -252,7 +254,7 @@ with tab3:
         if 2<= number_plot <= 3:
             with col32:
                 st.subheader(variables_plot_dict[var])
-                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top_format.sort_values(by=var, ascending=False).head(5)
                 df_top = df_top[['nombre_coloquial', var]]
                 top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
                 # CSS to inject contained in a string
@@ -269,7 +271,7 @@ with tab3:
         if 4<= number_plot <= 5:
             with col33:
                 st.subheader(variables_plot_dict[var])
-                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top_format.sort_values(by=var, ascending=False).head(5)
                 df_top = df_top[['nombre_coloquial', var]]
                 top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
                 # CSS to inject contained in a string
@@ -286,7 +288,7 @@ with tab3:
         if 6<= number_plot <= 9:
             with col34:
                 st.subheader(variables_plot_dict[var])
-                df_top = data.sort_values(by=var, ascending=False).head(5)
+                df_top = df_top_format.sort_values(by=var, ascending=False).head(5)
                 df_top = df_top[['nombre_coloquial', var]]
                 top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
 
@@ -313,7 +315,6 @@ with tab4:
             club_guerra1 = st.selectbox(
                 'Seleccione el club A',
                 club_sb_values,
-                # default='Estudiantes (LP)',
                 key = 'sb_guerra_a'
             )
             # Convertimos el array a list para borrar el elemento seleccionado en el primer selectbox
@@ -349,6 +350,7 @@ with tab4:
 
             df_guerra = df_guerra.replace({"variable": variables_plot_dict})
             df_guerra.set_index('variable')
+            df_guerra = df_guerra.applymap(lambda x: f'{x:,d}' if isinstance(x, int) else x)
             with col42:
                 st.table(df_guerra)
 with tab5:
