@@ -6,8 +6,9 @@ from PIL import Image
 
 
 # Usamos todo el ancho en lugar de la parte central de la pagina
-st.set_page_config(layout="wide")
-
+st.set_page_config(page_title="Afa-nalytics",
+                   layout='wide',
+                   initial_sidebar_state='auto')
 
 
 
@@ -66,7 +67,7 @@ def density_graph_club(club, data, data_club, categoria, variable, x_axis_label,
         y=y,
         color='categoria:N'
     )
-    # El configure se pasó al codigo de donde se llama la funcion
+    # El configure del gráfico se pasó al codigo de donde se llama la funcion
     # https://stackoverflow.com/questions/50662831/layered-or-facet-bar-plot-with-label-values-in-altair
 
     #     .configure_mark(
@@ -107,9 +108,9 @@ variables_plot_dict = {'capacidad_estadio':'Capacidad del Estadio',
                       'balance_anual':'Balance anual'}
 
 
-st.title('FUTBOL O MUERTE!')
+st.title('AFA-nalytics!')
 # Definimos las tabs
-tab1, tab2, tab3, tab4 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "ABOUT"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["GENERAL", "CLUB POR CLUB", "CLUBES TOP", "GUERRA DE CLUBES", "ABOUT"])
 
 
 
@@ -139,17 +140,14 @@ with tab1:
     for variable in variables_plot_dict:
         if number_plot<=4:
             with col11:
-                st.text(number_plot)
                 st.subheader(variables_plot_dict[variable], anchor=None)
                 st.altair_chart(density_graph(data, categoria_ms, variable, variables_plot_dict[variable], 'Densidad'), use_container_width=True)
         if 5 <= number_plot <=9:
             with col12:
-                st.text(number_plot)
                 st.subheader(variables_plot_dict[variable], anchor=None)
                 st.altair_chart(density_graph(data, categoria_ms, variable, variables_plot_dict[variable], 'Densidad'), use_container_width=True)
         if number_plot>=10:
             with col13:
-                st.text(number_plot)
                 st.subheader(variables_plot_dict[variable], anchor=None)
                 st.altair_chart(density_graph(data, categoria_ms, variable, variables_plot_dict[variable], 'Densidad'), use_container_width=True)
         number_plot = number_plot + 1
@@ -289,6 +287,7 @@ with tab3:
                 df_top = data.sort_values(by=var, ascending=False).head(5)
                 df_top = df_top[['nombre_coloquial', var]]
                 top_df = rename_columns(df_top, 'nombre_coloquial', var, variables_plot_dict)
+
                 # CSS to inject contained in a string
                 hide_table_row_index = """
                             <style>
@@ -304,6 +303,53 @@ with tab3:
 
 
 with tab4:
+    with st.container():
+        st.subheader('Comparación entre clubes')
+        col41, col42  = st.columns([1,2])
+        with col41:
+            # Menú desplegable clubes a y b
+            club_guerra1 = st.selectbox(
+                'Seleccione el club A',
+                club_sb_values,
+                # default='Estudiantes (LP)',
+                key = 'sb_guerra_a'
+            )
+            # Convertimos el array a list para borrar el elemento seleccionado en el primer selectbox
+            # (para evitar seleccionar los mismos clubes)
+            club_sb_b = club_sb_values.tolist()
+            club_sb_b.remove(club_guerra1)
+
+            club_guerra2 = st.selectbox(
+                'Seleccione el club B',
+                club_sb_b,
+                # default='Estudiantes (LP)',
+                key='sb_guerra_b'
+            )
+            df_guerra = data.loc[(data['nombre_coloquial']==club_guerra1) | (data['nombre_coloquial']==club_guerra2)]
+            df_guerra = df_guerra[
+                ['nombre_coloquial', 'capacidad_estadio', 'socios', 'division', 'titulos_primera', 'titulos_internacionales',
+                 'entradas_vendidas', 'ingresos_totales', 'sueldo_dt', 'sueldos_plantel', 'balance_anual']]
+
+            # Transformamos el DF para mostrarlo
+            df_guerra.set_index('nombre_coloquial')
+            df_guerra = df_guerra.melt(id_vars='nombre_coloquial',
+                                       value_vars = [
+                                                      'capacidad_estadio', 'socios', 'division', 'titulos_primera',
+                                                      'titulos_internacionales', 'entradas_vendidas',
+                                                      'ingresos_totales', 'sueldo_dt', 'sueldos_plantel',
+                                                      'balance_anual'
+                                                      ],
+                                       value_name = 'cantidad')
+
+            df_guerra = df_guerra.pivot(index = 'variable' ,
+                                        columns = 'nombre_coloquial',
+                                        values = 'cantidad').reset_index()
+
+            df_guerra = df_guerra.replace({"variable": variables_plot_dict})
+            df_guerra.set_index('variable')
+            with col42:
+                st.table(df_guerra)
+with tab5:
     # st.header("About")
     about = '''Desarrollado por [Mato](https://matog.github.io/cv/), con la base gentimente cedida por [@unknown.datasets](https://linktr.ee/unknow.datasets)
 
