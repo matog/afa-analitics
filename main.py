@@ -52,13 +52,15 @@ data = load_data()
 
 
 def density_graph(data, categoria_menu, variable, x_axis_label, y_axis_label):
+
     x = x_axis_label+":Q"
     y = y_axis_label+":Q"
     # color = categoria+':N'
 
-    # ISIN sólo permite pasas listas. Si pasamos un string, tira un error.
+    # ISIN sólo permite pasar listas. Si pasamos un string, tira un error.
     # Verificamos que categoria_menu tenga al menos dos elementos (list), sino, lo convertirmos a list con un elemento
     if not isinstance(categoria_menu, list): categoria_menu = [categoria_menu]
+
 
     df_1 = data.loc[data['categoria'].isin(categoria_menu)]
     df_1 = df_1[[variable, 'categoria']]
@@ -74,6 +76,7 @@ def density_graph(data, categoria_menu, variable, x_axis_label, y_axis_label):
     opacity=0.2,
     color='red'
     )
+
     return c
 
 
@@ -81,7 +84,13 @@ def density_graph_club(club, data, data_club, categoria, variable, x_axis_label,
     x = x_axis_label + ":Q"
     y = y_axis_label + ":Q"
     # color = categoria+':N'
-
+    # st.text('club:' + str(type(club)))
+    # st.text('data:' + str(type(data)))
+    # st.text('data_club:' + str(type(data_club)))
+    # st.text('categoria:' + str(type(categoria)))
+    # st.text('variable:' + str(type(variable)))
+    # st.text('x_axis_label:' + str(type(x)))
+    # st.text('y_axis_label:' + str(type(y)))
     # df_1 = data.loc[data['categoria'].isin(categoria_menu)]
     # df_1 = df_1[[variable, 'categoria']]
     c = alt.Chart(data).transform_density(
@@ -392,7 +401,10 @@ with tab5:
 
     gap_years = st.slider(
         'Seleccione el rango de fechas',
-        year_min, year_max, (year_min, year_max))
+        int(year_min),
+        int(year_max),
+        (int(year_min), int(year_max)),
+        int(1))
     # st.text(gap_years)
     #
     df_geo = data.loc[((data['fundacion_anio']>=gap_years[0]) & (data['fundacion_anio']<=gap_years[1])) & (data['lat']!=0) ]
