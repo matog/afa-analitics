@@ -9,6 +9,6 @@ Desarrollado por [Mato](https://matog.github.io/cv/), con la base gentimente ced
 Todo corre sobre [Streamlit](https://www.streamlit.io), un framework de Python para desarrollar dashboards, y como paquetes adicionales sólo utiliza [Pandas](https://pandas.pydata.org/) para procesar la info, [Altair](https://altair-viz.github.io/) para graficarla y [Folium](https://python-visualization.github.io/folium/)  
 para los mapas.  
 
-El código está disponible en [Github](https://github.com/matog/afa-analitics). También existe una versión en docker, que prontó estará disponible para descargar.
+El código está disponible en [Github](https://github.com/matog/afa-analitics). También existe una versión en docker, disponible en [Docker Hub](https://hub.docker.com/r/gmato/afanalytics), con las instrucciones correspondientes.
 
 Se puede ver una versión funcional en [mi server casero](https://afa-data.carlosbilardo.duckdns.org/)
