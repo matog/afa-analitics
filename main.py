@@ -71,10 +71,11 @@ def density_graph(data, categoria_menu, variable, x_axis_label, y_axis_label):
     ).mark_area().encode(
         x= x,
         y= y,
-        color = 'categoria:N'
+        color = alt.Color('categoria:N',
+                          legend=alt.Legend(orient='bottom'))
     ).configure_mark(
     opacity=0.2,
-    color='red'
+    color='red',
     )
 
     return c
@@ -100,7 +101,8 @@ def density_graph_club(club, data, data_club, categoria, variable, x_axis_label,
     ).mark_area().encode(
         x=x,
         y=y,
-        color='categoria:N'
+        color= alt.Color('categoria:N',
+                          legend=alt.Legend(orient='bottom'))
     )
     # El configure del gráfico se pasó al codigo de donde se llama la funcion
     # https://stackoverflow.com/questions/50662831/layered-or-facet-bar-plot-with-label-values-in-altair
